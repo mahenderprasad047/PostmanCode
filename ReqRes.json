@@ -1,0 +1,202 @@
+{
+	"info": {
+		"_postman_id": "c18736ea-5d8b-4e68-a0ca-934a3fd01a7e",
+		"name": "reqres",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28493173"
+	},
+	"item": [
+		{
+			"name": "Smoke",
+			"item": [
+				{
+					"name": "GetUsers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Verify Status code is 200\", function () {\r",
+									"    if(pm.response.to.have.status(200))\r",
+									"    {\r",
+									"        console.log(\"Verified status code for the response\")\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Total Pages\", function () {\r",
+									"    var jasonData = pm.response.json();\r",
+									"    pm.expect(jasonData.total_pages).to.eql(2);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify Total Pages\", function () {\r",
+									"    var jasonData = pm.response.json();\r",
+									"    pm.expect(jasonData.data[2].first_name).to.eql(\"Emma\");\r",
+									"});\r",
+									"\r",
+									"postman.setNextRequest(\"AddUser\");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.warn(\"Request to get the user details\")"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/api/users",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Regression",
+			"item": [
+				{
+					"name": "DeleteUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});\r",
+									"\r",
+									"postman.setNextRequest(null);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.warn(\"Request to delete the user details\")"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/api/users/200",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"200"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify ID is genrated for new user\", function () {\r",
+									"    var jasonData = pm.response.json();\r",
+									"    if(jasonData.id != \"\")\r",
+									"    {\r",
+									"        console.log(\"Verified ID is not null. New ID is - \" + jasonData.id)\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"postman.setNextRequest(\"DeleteUser\");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var name = \"Yogesh Postman\"\r",
+									"console.info(\"New User Name in pre-request script is \"+ name)\r",
+									"pm.globals.set(\"UserName\", name);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"{{UserName}}\",\r\n    \"job\": \"leader\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseURL}}/api/users",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"console.info(\"Running pre-request script from Colelction level\")"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
