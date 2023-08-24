@@ -17,7 +17,7 @@
 							"script": {
 								"exec": [
 									"pm.test(\"Verify Status code is 200\", function () {\r",
-									"    if(pm.response.to.have.status(201))\r",
+									"    if(pm.response.to.have.status(200))\r",
 									"    {\r",
 									"        console.log(\"Verified status code for the response\")\r",
 									"    }\r",
